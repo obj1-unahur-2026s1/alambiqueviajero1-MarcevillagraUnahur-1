@@ -1,0 +1,101 @@
+import elAlambiqueViajero.*
+
+describe "Luke y sus viajes" {
+
+  test "Al inicio Luke no visitó ningún lugar" {
+    assert.equals(0, luke.lugaresVisitados())
+  }
+
+  test "Luke viaja a París y se trae el llavero de la torre eiffel" {
+    luke.viajar(paris)
+    assert.equals(1, luke.lugaresVisitados())
+    assert.equals(llaveroTorreEiffel, luke.recuerdo())
+  }
+
+  test "Luke no puede ir a París si el vehículo no tiene combustible suficiente" {
+    luke.cambiarVehiculo(superConvertible)
+    superConvertible.convertirA("deportivo")
+    luke.viajar(paris)
+    assert.equals(0, luke.lugaresVisitados())
+  }
+
+  test "Luke viaja a Buenos Aires con el alambique veloz (rápido) y se trae un mate" {
+    luke.viajar(buenosAires)
+    assert.equals(1, luke.lugaresVisitados())
+    assert.equals(mate, luke.recuerdo())
+  }
+
+  test "El mate de Buenos Aires tiene yerba cuando el presidente regala yerba" {
+    buenosAires.regalaYerba(true)
+    luke.viajar(buenosAires)
+    assert.that(luke.recuerdo().conYerba())
+  }
+
+  test "El mate de Buenos Aires no tiene yerba cuando el presidente NO regala yerba" {
+    buenosAires.regalaYerba(false)
+    luke.viajar(buenosAires)
+    assert.notThat(luke.recuerdo().conYerba())
+  }
+
+  test "Luke siempre puede viajar a Bagdad" {
+    luke.viajar(bagdad)
+    assert.equals(1, luke.lugaresVisitados())
+    assert.equals(bidonDePetroleo, luke.recuerdo())
+  }
+
+  test "El recuerdo de Bagdad puede cambiar" {
+    bagdad.cambiarRecuerdo(jardinColgante)
+    luke.viajar(bagdad)
+    assert.equals(jardinColgante, luke.recuerdo())
+    bagdad.cambiarRecuerdo(bidonDePetroleo)
+  }
+
+  test "Las Vegas homenajea a París: usa su restricción y su recuerdo" {
+    lasVegas.homenajearA(paris)
+    luke.viajar(lasVegas)
+    assert.equals(1, luke.lugaresVisitados())
+    assert.equals(llaveroTorreEiffel, luke.recuerdo())
+  }
+
+  test "Las Vegas homenajea a Buenos Aires: restricción y recuerdo de Buenos Aires" {
+    lasVegas.homenajearA(buenosAires)
+    luke.viajar(lasVegas)
+    assert.equals(1, luke.lugaresVisitados())
+    assert.equals(mate, luke.recuerdo())
+  }
+
+  test "El alambique veloz pierde combustible al viajar" {
+    const combustibleAntes = alambiqueVeloz.combustible()
+    luke.viajar(paris)
+    assert.equals(combustibleAntes - 10, alambiqueVeloz.combustible())
+  }
+
+  test "La antigüalla blindada es rápida cuando tiene más de 5 gangsters" {
+    assert.that(antiguallaBlindata.esRapido())
+  }
+
+  test "La antigüalla blindada pierde un gangster al viajar" {
+    luke.cambiarVehiculo(antiguallaBlindata)
+    const gangsterAntes = antiguallaBlindata.gangsters()
+    luke.viajar(bagdad)
+    assert.equals(gangsterAntes - 1, antiguallaBlindata.gangsters())
+  }
+
+  test "El superConvertible en modo deportivo es rápido pero sin combustible suficiente" {
+    superConvertible.convertirA("deportivo")
+    assert.that(superConvertible.esRapido())
+    assert.notThat(superConvertible.tieneSuficienteCombustible())
+  }
+
+  test "El superConvertible en modo economico tiene combustible pero no es rápido" {
+    superConvertible.convertirA("economico")
+    assert.notThat(superConvertible.esRapido())
+    assert.that(superConvertible.tieneSuficienteCombustible())
+  }
+
+  test "Luke viaja a Tokio si el vehículo es rápido y tiene combustible" {
+    luke.viajar(tokio)
+    assert.equals(1, luke.lugaresVisitados())
+    assert.equals(katana, luke.recuerdo())
+  }
+}
